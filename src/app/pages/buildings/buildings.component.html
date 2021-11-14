@@ -1,0 +1,156 @@
+<header class="grey-box-container container">
+  <div class="row">
+    <div class="mr-auto p-2">Welcome</div>
+    <div class="p-2">
+      <i class="bi bi-person-circle"></i>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-8 m-auto">
+      <div class="d-flex">
+        <div class="p-2">
+          <a (click)="showModal(content, true)"
+            ><button class="btn btn-primary">Add</button></a
+          >
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Name</th>
+              <th scope="col">Area</th>
+              <th scope="col">Location</th>
+              <th scope="col">img</th>
+              <th scope="col">Update</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let building of buildings$ | async; index as i">
+              <td scope="row">{{ i + 1 }}</td>
+              <td>
+                {{ building.name }}
+              </td>
+              <td>{{ building.area }}</td>
+              <td>{{ building.location }}</td>
+              <td>
+                <img [src]="building.image" class="mr-2" />
+              </td>
+              <td>
+                <button
+                  (click)="showModal(content, false, building, i)"
+                  type="button"
+                  class="btn btn-primary"
+                >
+                  Update
+                </button>
+              </td>
+              <td>
+                <button
+                  (click)="delete(i)"
+                  type="button"
+                  class="btn btn-outline-danger"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-x-square-fill"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"
+                    ></path>
+                  </svg>
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Building update</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="buildingForm">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          formControlName="name"
+          class="form-control"
+          id="name"
+        />
+        <div
+          *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+          class="alert alert-danger"
+        >
+          Name is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Area</label>
+        <input
+          type="text"
+          formControlName="area"
+          class="form-control"
+          id="area"
+        />
+        <div
+          *ngIf="area?.invalid && (area?.dirty || area?.touched)"
+          class="alert alert-danger"
+        >
+          Area is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Location</label>
+        <input
+          type="text"
+          formControlName="location"
+          class="form-control"
+          id="location"
+        />
+        <div
+          *ngIf="location?.invalid && (location?.dirty || location?.touched)"
+          class="alert alert-danger"
+        >
+          Location is required
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      [disabled]="buildingForm.invalid"
+      (click)="modalAction()"
+    >
+      Save
+    </button>
+  </div>
+</ng-template>
